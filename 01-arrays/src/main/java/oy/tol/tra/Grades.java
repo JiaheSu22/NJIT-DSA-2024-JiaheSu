@@ -5,7 +5,7 @@ package oy.tol.tra;
  * misbehaving algorithm for reversing the array.
  */
 public class Grades {
-   
+
    private Integer [] grades = null;
 
    /**
@@ -32,7 +32,7 @@ public class Grades {
        6. Transform the algorithm to <strong>use</strong> the generic one from Algorithms.java, as instructed in the readme file.
       */
       int i = 0;
-      while (i <= grades.length/2) {
+      while (i < grades.length/2) {
          int temp = grades[i];
          grades[i] = grades[grades.length-i-1];
          grades[grades.length-i-1] = temp;
@@ -53,14 +53,15 @@ public class Grades {
        6. Transform the algorithm to <strong>use</strong> the generic one from Algorithms.java as instructed in the readme file.
       */
       int i = grades.length-1;
-      while (i > 0) {
-         if (grades[i] < grades[i-1]) {
-            int tmp = grades[i];
-            grades[i] = grades[i-1];
-            grades[i-1] = tmp;
-         }
-         i--;
-      }
+       for (int j = 0; j <= i - 1; j++) {
+           for (int k = j + 1; k <= i; k++) {
+               if (grades[j] > grades[k]) {
+                   int tmp = grades[k];
+                   grades[k] = grades[j];
+                   grades[j] = tmp;
+               }
+           }
+       }
    }
 
    /**
