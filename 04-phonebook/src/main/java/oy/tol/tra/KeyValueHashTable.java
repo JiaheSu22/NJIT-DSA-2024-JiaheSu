@@ -42,7 +42,7 @@ public class KeyValueHashTable<K extends Comparable<K>, V> implements Dictionary
     @Override
     public int size() {
         // TODO: Implement this.
-        return 0;
+        return count;
     }
 
     /**
@@ -72,27 +72,58 @@ public class KeyValueHashTable<K extends Comparable<K>, V> implements Dictionary
     public boolean add(K key, V value) throws IllegalArgumentException, OutOfMemoryError {
         // TODO: Implement this.
         // Remeber to check for null values.
-
-        // Checks if the LOAD_FACTOR has been exceeded --> if so, reallocates to a bigger hashtable.
-        if (((double)count * (1.0 + LOAD_FACTOR)) >= values.length) {
-            reallocate((int)((double)(values.length) * (1.0 / LOAD_FACTOR)));
-        }
         // Remember to get the hash key from the Person,
         // hash table computes the index for the Person (based on the hash value),
         // if index was taken by different Person (collision), get new hash and index,
         // insert into table when the index has a null in it,
         // return true if existing Person updated or new Person inserted.
-        
-        return false;
+        if (key == null) throw new IllegalArgumentException("Key cannot be null.");
+
+        int index = key.hashCode() % values.length;
+        int originalIndex = index;
+        boolean updated = false;
+        int steps = 0;
+        while (values[index] != null && !values[index].getKey().equals(key)) {
+            index = (index + 1) % values.length;
+            steps++;
+            if (index == originalIndex) {
+                throw new OutOfMemoryError("Hash table is full.");
+            }
+        }
+
+        if (values[index] == null) {
+            count++;
+        } else {
+            updated = true;
+        }
+
+        values[index] = new Pair<>(key, value);
+        maxProbingSteps = Math.max(maxProbingSteps, steps);
+
+        if (steps > 0) collisionCount++;
+
+        if (((double)count / values.length) > LOAD_FACTOR) {
+            reallocate((int)(values.length * (1.0 / LOAD_FACTOR)));
+        }
+
+        return updated;
     }
 
     @Override
     public V find(K key) throws IllegalArgumentException {
-        // Remember to check for null.
+        if (key == null) throw new IllegalArgumentException("Key cannot be null.");
 
-        // Must use same method for computing index as add method
-        
-        return null;
+        int index = key.hashCode() % values.length;
+        int originalIndex = index;
+
+        while (values[index] != null && !values[index].getKey().equals(key)) {
+            index = (index + 1) % values.length; // 线性探测
+            if (index == originalIndex) { // 检查是否已回到起始索引
+                return null; // 如果是，则表明键不在哈希表中
+            }
+        }
+
+        return values[index] != null ? values[index].getValue() : null;
     }
 
     @Override
