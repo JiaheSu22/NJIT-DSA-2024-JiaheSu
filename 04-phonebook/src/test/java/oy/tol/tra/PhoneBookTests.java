@@ -31,7 +31,7 @@ public class PhoneBookTests {
     static Dictionary<Person, PhoneNumber> slowPhoneBook = null;
     static Dictionary<Person, PhoneNumber> fastHashTablePhoneBook = null;
     static Dictionary<Person, PhoneNumber> fastBSTPhoneBook = null;
-    static final int ENTRY_COUNT = 12345;
+    static final int ENTRY_COUNT = 62691;
 
     // Test classes
     static Map<Person, PhoneNumber> testPersons = new HashMap<>();

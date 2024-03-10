@@ -42,7 +42,7 @@ public class Person implements Comparable<Person> {
         int hash = 5381;
         hash = 7 * hash + (firstName != null ? firstName.hashCode() : 0);
         hash = 7 * hash + (lastName != null ? lastName.hashCode() : 0);
-        return hash;
+        return hash & 0x7fffffff;
     }
 
     @Override

@@ -22,7 +22,7 @@ public class KeyValueHashTable<K extends Comparable<K>, V> implements Dictionary
 
     @Override
     public Type getType() {
-        return Type.NONE;
+        return Type.HASHTABLE;
     }
 
     @SuppressWarnings("unchecked")
@@ -81,7 +81,7 @@ public class KeyValueHashTable<K extends Comparable<K>, V> implements Dictionary
 
         int index = key.hashCode() % values.length;
         int originalIndex = index;
-        boolean updated = false;
+        boolean isNewAddition = false; // This will indicate whether a new key-value pair was added.
         int steps = 0;
         while (values[index] != null && !values[index].getKey().equals(key)) {
             index = (index + 1) % values.length;
@@ -91,10 +91,10 @@ public class KeyValueHashTable<K extends Comparable<K>, V> implements Dictionary
             }
         }
 
+        // If we found an empty spot, it means we are adding a new key-value pair.
         if (values[index] == null) {
             count++;
-        } else {
-            updated = true;
+            isNewAddition = true;
         }
 
         values[index] = new Pair<>(key, value);
@@ -102,11 +102,13 @@ public class KeyValueHashTable<K extends Comparable<K>, V> implements Dictionary
 
         if (steps > 0) collisionCount++;
 
-        if (((double)count / values.length) > LOAD_FACTOR) {
-            reallocate((int)(values.length * (1.0 / LOAD_FACTOR)));
+
+        if (((double) count / values.length) > LOAD_FACTOR) {
+            reallocate((int) (values.length * (1.0 / LOAD_FACTOR)));
         }
 
-        return updated;
+        // Return true if a new key-value pair was added, false otherwise.
+        return isNewAddition;
     }
 
     @Override
@@ -117,9 +119,9 @@ public class KeyValueHashTable<K extends Comparable<K>, V> implements Dictionary
         int originalIndex = index;
 
         while (values[index] != null && !values[index].getKey().equals(key)) {
-            index = (index + 1) % values.length; // 线性探测
-            if (index == originalIndex) { // 检查是否已回到起始索引
-                return null; // 如果是，则表明键不在哈希表中
+            index = (index + 1) % values.length;
+            if (index == originalIndex) {
+                return null;
             }
         }
 
