@@ -52,16 +52,7 @@ public class Grades {
        5. Fix the issue.
        6. Transform the algorithm to <strong>use</strong> the generic one from Algorithms.java as instructed in the readme file.
       */
-      int i = grades.length-1;
-       for (int j = 0; j <= i - 1; j++) {
-           for (int k = j + 1; k <= i; k++) {
-               if (grades[j] > grades[k]) {
-                   int tmp = grades[k];
-                   grades[k] = grades[j];
-                   grades[j] = tmp;
-               }
-           }
-       }
+       Algorithms.sort(this.grades);
    }
 
    /**
