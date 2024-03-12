@@ -101,34 +101,32 @@ public class Algorithms {
         array[index2] = temp;
     }
 
-    public static <T> int partitionByRule(T[] elements, int count, Predicate<T> rule) {
-        int left = 0;
-        int right = count - 1;
-
-        while (left < right) {
-            // Find an element from the right that matches the rule
-            while (left < right && rule.test(elements[right])) {
-                right--;
+    public static <T> int partitionByRule(T[] array, int count, Predicate<T> rule) {
+        // Find first element rules applies to.
+        // Index of that element will be in variable index.
+        int index = 0;
+        for (; index < count; index++) {
+            if (rule.test(array[index])) {
+                break;
             }
-
-            // Swap the right element (matching the rule) with the left element (not matching)
-            T temp = elements[left];
-            elements[left] = elements[right];
-            elements[right] = temp;
-
-            // Find an element from the left that doesn't match the rule
-            while (left < right && !rule.test(elements[left])) {
-                left++;
-            }
-
-            // Swap the left element (not matching) with the right element (matching)
-            temp = elements[left];
-            elements[left] = elements[right];
-            elements[right] = temp;
         }
-
-        // Return the index of the first element that matches the rule
-        return left;
+        // If went to the end, nothing was selected so quit here.
+        if (index >= count) {
+            return count;
+        }
+        // Then start finding not selected elements starting from next from index.
+        // If the element is not selected, swap it with the selected one.
+        int nextIndex = index + 1;
+        // Until end of array reached.
+        while (nextIndex != count) {
+            if (!rule.test(array[nextIndex])) {
+                swap(array, index, nextIndex);
+                // If swapping was done, add to index since now it has non-selected element.
+                index++;
+            }
+            nextIndex++;
+        }
+        return index;
     }
 
     public static <T> void sortWithComparator(T[] array, Comparator<T> comparator) {
@@ -137,7 +135,6 @@ public class Algorithms {
             swapped = false;
             for (int j = 0; j < array.length - i - 1; j++) {
                 if (comparator.compare(array[j], array[j + 1]) > 0) {
-                    // Swap array[j] and array[j+1]
                     T temp = array[j];
                     array[j] = array[j + 1];
                     array[j + 1] = temp;

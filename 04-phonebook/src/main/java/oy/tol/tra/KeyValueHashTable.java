@@ -78,7 +78,6 @@ public class KeyValueHashTable<K extends Comparable<K>, V> implements Dictionary
         // insert into table when the index has a null in it,
         // return true if existing Person updated or new Person inserted.
         if (key == null) throw new IllegalArgumentException("Key cannot be null.");
-
         int index = key.hashCode() % values.length;
         int originalIndex = index;
         boolean isNewAddition = false; // This will indicate whether a new key-value pair was added.
@@ -91,7 +90,7 @@ public class KeyValueHashTable<K extends Comparable<K>, V> implements Dictionary
             }
         }
 
-        // If we found an empty spot, it means we are adding a new key-value pair.
+        // If found an empty spot, it means adding a new key-value pair.
         if (values[index] == null) {
             count++;
             isNewAddition = true;
