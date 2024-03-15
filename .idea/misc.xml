@@ -10,6 +10,7 @@
         <option value="$PROJECT_DIR$/02-2-queue/pom.xml" />
         <option value="$PROJECT_DIR$/03-binarysearch/pom.xml" />
         <option value="$PROJECT_DIR$/04-phonebook/pom.xml" />
+        <option value="$PROJECT_DIR$/05-parenthesis-checker/pom.xml" />
       </list>
     </option>
     <option name="workspaceImportForciblyTurnedOn" value="true" />
