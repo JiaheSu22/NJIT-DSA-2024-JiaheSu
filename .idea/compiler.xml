@@ -10,6 +10,7 @@
         <module name="00-init" />
         <module name="04-1-stack" />
         <module name="67-phonebook (1)" />
+        <module name="04-2-queue (1)" />
         <module name="04-2-queue" />
         <module name="01-arrays" />
         <module name="67-phonebook" />
