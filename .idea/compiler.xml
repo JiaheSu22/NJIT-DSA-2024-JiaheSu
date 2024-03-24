@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="05-binsearch" />
         <module name="00-init" />
+        <module name="booksandwords" />
         <module name="04-1-stack" />
         <module name="67-phonebook (1)" />
         <module name="04-2-queue (1)" />

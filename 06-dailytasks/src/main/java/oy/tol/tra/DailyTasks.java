@@ -9,7 +9,7 @@ import java.util.TimerTask;
  */
 public class DailyTasks {
 
-   private QueueInterface<String> dailyTaskQueue = new QueueImplementation<>(10);
+   private QueueInterface<String> dailyTaskQueue = null;
    private Timer timer = null;
    private static final int TASK_DELAY_IN_SECONDS = 1 * 1000;
 
@@ -29,7 +29,7 @@ public class DailyTasks {
       try {
          // TODO:
          // 1. create a queue (to the member variable!) for daily tasks, which are strings.
-
+         dailyTaskQueue = new QueueImplementation<String>(10);
          // 2. read the tasks for today by calling readTasks() -- implementing missing parts of it!
          readTasks();
          // 3. create Java Timer object (to member variable) to schedule your daily tasks. (Already given to you.)
