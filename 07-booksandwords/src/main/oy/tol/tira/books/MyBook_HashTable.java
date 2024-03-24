@@ -2,14 +2,16 @@ package oy.tol.tira.books;
 
 import java.io.*;
 
-public class MyBook implements Book {
+public class MyBook_HashTable implements Book {
     private String bookFilePath;
     private String ignoreFilePath;
     private KeyValueHashTable<String, Integer> wordCounts;
-    private WordFilter wordFilter; // Using WordFilter to manage ignored words
+    private WordFilter wordFilter;
     private int totalWordCount = 0;
+    private int uniqueWordCount = 0;
+    private int ignoredWordsTotal = 0;
 
-    public MyBook() {
+    public MyBook_HashTable() {
         this.wordCounts = new KeyValueHashTable<>(); // Initialize with default capacity
         this.wordFilter = new WordFilter(); // Initialize WordFilter
     }
@@ -42,47 +44,56 @@ public class MyBook implements Book {
                 processLine(line);
             }
         }
+        uniqueWordCount = wordCounts.size(); // Update unique word count after processing the file
     }
 
     private void processLine(String line) {
         for (String word : line.split("\\P{IsAlphabetic}+")) {
             word = word.toLowerCase();
-            if (word.length() > 1 && !wordFilter.shouldFilter(word)) {
-                Integer count = wordCounts.find(word);
-                count = (count == null) ? 1 : count + 1;
-                wordCounts.add(word, count);
-                totalWordCount++;
+            if (word.length() > 1) {
+                if (!wordFilter.shouldFilter(word)) {
+                    Integer count = wordCounts.find(word);
+                    if (count == null) {
+                        uniqueWordCount++; // Increment unique word count for each new word
+                    }
+                    count = (count == null) ? 1 : count + 1;
+                    wordCounts.add(word, count);
+                    totalWordCount++;
+                } else {
+                    ignoredWordsTotal++; // Increment ignored words count for each filtered word
+                }
             }
         }
     }
 
     @Override
     public void report() {
-        Pair<String, Integer>[] sortedWords = wordCounts.toSortedArray();
+        Pair<String, Integer>[] sortedWords = wordCounts.toSortedArray(); // Assuming toSortedArray() method sorts by descending order
         System.out.println("Top Words by Occurrence:");
         for (int i = 0; i < Math.min(sortedWords.length, 100); i++) {
-            System.out.println((i + 1) + ". " + sortedWords[i].getKey() + " - " + sortedWords[i].getValue());
+            String word = String.format("%-20s", sortedWords[i].getKey()).replace(' ', '.');
+            System.out.format("%4d. %s %6d%n", i + 1, word, sortedWords[i].getValue());
         }
 
         System.out.println("\nStatistics:");
         System.out.println("Total number of words: " + totalWordCount);
-        System.out.println("Number of unique words: " + wordCounts.size());
+        System.out.println("Number of unique words: " + uniqueWordCount);
         System.out.println("Number of words ignored: " + wordFilter.ignoreWordCount());
-        // Additional hash table statistics can be printed here as well
-
-        System.out.println("\nHash Table Statistics:");
-        System.out.println(wordCounts.getStatus());
+        System.out.println("Ignored words count in the book file: " + ignoredWordsTotal);
     }
 
     @Override
     public void close() {
         wordCounts = new KeyValueHashTable<>(); // Reset word counts
         wordFilter.close(); // Reset WordFilter
+        totalWordCount = 0;
+        uniqueWordCount = 0; // Reset unique word count
+        ignoredWordsTotal = 0; // Reset ignored words total
     }
 
     @Override
     public int getUniqueWordCount() {
-        return wordCounts.size();
+        return uniqueWordCount;
     }
 
     @Override
@@ -92,8 +103,6 @@ public class MyBook implements Book {
 
     @Override
     public String getWordInListAt(int position) {
-        // This method will need a way to access a word by position, which might not be straightforward with a hash table.
-        // One approach could be to convert the hash table to an array and then access by position.
         Pair<String, Integer>[] sortedWords = wordCounts.toSortedArray(); // Assuming toSortedArray is implemented
         if (position >= 0 && position < sortedWords.length) {
             return sortedWords[position].getKey();
