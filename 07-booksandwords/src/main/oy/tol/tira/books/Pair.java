@@ -1,5 +1,7 @@
 package oy.tol.tira.books;
 
+import java.util.Objects;
+
 /**
  * Class Pair defines a key-value -pair of objects where each key has an
  * associated value.
@@ -43,8 +45,8 @@ public class Pair<K, V extends Comparable<V>> implements Comparable<Pair<K, V>> 
       if (this == obj) return true;
       if (obj == null || getClass() != obj.getClass()) return false;
       Pair<?, ?> other = (Pair<?, ?>) obj;
-      if (key != null ? !key.equals(other.key) : other.key != null) return false;
-      return value != null ? value.equals(other.value) : other.value == null;
+      if (!Objects.equals(key, other.key)) return false;
+      return Objects.equals(value, other.value);
    }
 
    @Override
