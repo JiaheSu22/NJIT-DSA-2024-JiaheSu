@@ -24,7 +24,8 @@ public class StackImplementation<E> implements StackInterface<E> {
     */
    public StackImplementation() throws StackAllocationException {
       // TODO: call the constructor with size parameter with default size of 10.
-      this(DEFAULT_STACK_SIZE);
+      capacity = DEFAULT_STACK_SIZE;
+      itemArray = new Object[DEFAULT_STACK_SIZE];
    }
 
    /** TODO: Implement so that

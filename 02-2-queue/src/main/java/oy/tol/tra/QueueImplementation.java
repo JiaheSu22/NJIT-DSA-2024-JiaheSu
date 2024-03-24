@@ -7,10 +7,12 @@ public class QueueImplementation<E> implements QueueInterface<E> {
     private int head = 0;
     private int tail = 0;
 
-    public QueueImplementation() {
+    private static final int DEFAULT_QUEUE_SIZE = 10;
 
+    public QueueImplementation() throws QueueAllocationException {
+        capacity = DEFAULT_QUEUE_SIZE;
+        itemArray = new Object[DEFAULT_QUEUE_SIZE];
     }
-
     public QueueImplementation(int capacity) {
         this.capacity = capacity;
         this.itemArray = (E[]) new Object[capacity];

@@ -6,9 +6,11 @@ public class QueueImplementation<E> implements QueueInterface<E> {
     private int size = 0;
     private int head = 0;
     private int tail = 0;
+    private static final int DEFAULT_QUEUE_SIZE = 10;
 
-    public QueueImplementation() {
-
+    public QueueImplementation() throws QueueAllocationException {
+        capacity = DEFAULT_QUEUE_SIZE;
+        itemArray = new Object[DEFAULT_QUEUE_SIZE];
     }
 
     public QueueImplementation(int capacity) {
