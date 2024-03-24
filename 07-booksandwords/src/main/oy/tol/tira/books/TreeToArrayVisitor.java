@@ -1,6 +1,6 @@
 package oy.tol.tira.books;
 
-class TreeToArrayVisitor<K extends Comparable<K>, V> implements Visitor<K, V> {
+class TreeToArrayVisitor<K extends Comparable<K>, V extends Comparable<V>> implements Visitor<K, V> {
 
    private Pair<K, V> [] elements;
    private int count = 0;

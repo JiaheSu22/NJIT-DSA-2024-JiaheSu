@@ -1,6 +1,6 @@
 package oy.tol.tira.books;
 
-public class KeyValueHashTable<K extends Comparable<K>, V> implements Dictionary<K, V> {
+public class KeyValueHashTable<K extends Comparable<K>, V extends Comparable<V>> implements Dictionary<K, V> {
 
     // This should implement a hash table.
 

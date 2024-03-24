@@ -1,6 +1,6 @@
 package oy.tol.tira.books;
 
-class TreeNode<K extends Comparable<K>, V> {
+class TreeNode<K extends Comparable<K>, V extends Comparable<V>> {
 
    private int hash = -1;
    Pair<K,V> keyValue;

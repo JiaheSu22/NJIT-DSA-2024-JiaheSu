@@ -5,13 +5,13 @@ import java.io.*;
 public class MyBook implements Book {
     private String bookFilePath;
     private String ignoreFilePath;
-    private KeyValueHashTable<String, Integer> wordCounts; // Using KeyValueHashTable for word counting
-    private SimpleList ignoreWords; // Assume SimpleList is a custom list implementation
+    private KeyValueHashTable<String, Integer> wordCounts;
+    private WordFilter wordFilter; // Using WordFilter to manage ignored words
     private int totalWordCount = 0;
 
     public MyBook() {
         this.wordCounts = new KeyValueHashTable<>(); // Initialize with default capacity
-        this.ignoreWords = new SimpleList(); // Assume SimpleList is already implemented
+        this.wordFilter = new WordFilter(); // Initialize WordFilter
     }
 
     @Override
@@ -20,6 +20,11 @@ public class MyBook implements Book {
         this.ignoreFilePath = ignoreWordsFile;
         verifyFileExists(bookFilePath);
         verifyFileExists(ignoreFilePath);
+        try {
+            wordFilter.readFile(ignoreFilePath); // Load ignored words into WordFilter
+        } catch (IOException e) {
+            throw new FileNotFoundException("Could not read ignore words file: " + ignoreWordsFile);
+        }
     }
 
     private void verifyFileExists(String filePath) throws FileNotFoundException {
@@ -30,8 +35,7 @@ public class MyBook implements Book {
     }
 
     @Override
-    public void countUniqueWords() throws IOException, OutOfMemoryError {
-        loadIgnoreWords();
+    public void countUniqueWords() throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(bookFilePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -40,19 +44,10 @@ public class MyBook implements Book {
         }
     }
 
-    private void loadIgnoreWords() throws IOException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(ignoreFilePath))) {
-            String[] words = reader.readLine().split(",");
-            for (String word : words) {
-                ignoreWords.add(word.trim()); // Assume add method exists in SimpleList
-            }
-        }
-    }
-
     private void processLine(String line) {
         for (String word : line.split("\\P{IsAlphabetic}+")) {
             word = word.toLowerCase();
-            if (word.length() > 1 && !ignoreWords.contains(word)) { // Assume contains method exists in SimpleList
+            if (word.length() > 1 && !wordFilter.shouldFilter(word)) {
                 Integer count = wordCounts.find(word);
                 count = (count == null) ? 1 : count + 1;
                 wordCounts.add(word, count);
@@ -63,42 +58,26 @@ public class MyBook implements Book {
 
     @Override
     public void report() {
-        // Convert the hash table to a sorted array. The sorting is assumed to be by word count in descending order.
         Pair<String, Integer>[] sortedWords = wordCounts.toSortedArray();
-
-        // Print the top 100 words or the total number of unique words, whichever is smaller.
         System.out.println("Top Words by Occurrence:");
         for (int i = 0; i < Math.min(sortedWords.length, 100); i++) {
             System.out.println((i + 1) + ". " + sortedWords[i].getKey() + " - " + sortedWords[i].getValue());
         }
 
-        // Print counts and statistics after the list
         System.out.println("\nStatistics:");
         System.out.println("Total number of words: " + totalWordCount);
         System.out.println("Number of unique words: " + wordCounts.size());
-        System.out.println("Number of words ignored: " + ignoreWords.size());
-        System.out.println("Number of words from the ignore list that appeared in the book: " + calculateIgnoredWordsInBook());
+        System.out.println("Number of words ignored: " + wordFilter.ignoreWordCount());
+        // Additional hash table statistics can be printed here as well
 
-        // Print hash table specific statistics
         System.out.println("\nHash Table Statistics:");
         System.out.println(wordCounts.getStatus());
     }
 
-    private int calculateIgnoredWordsInBook() {
-        int ignoredWordCountInBook = 0;
-        for (int i = 0; i < ignoreWords.size(); i++) {
-            String ignoredWord = ignoreWords.get(i);
-            if (wordCounts.find(ignoredWord) != null) {
-                ignoredWordCountInBook++;
-            }
-        }
-        return ignoredWordCountInBook;
-    }
-
     @Override
     public void close() {
-        wordCounts = new KeyValueHashTable<>(); // Reset the word counts hash table
-        ignoreWords.clear(); // Assume clear method exists in SimpleList
+        wordCounts = new KeyValueHashTable<>(); // Reset word counts
+        wordFilter.close(); // Reset WordFilter
     }
 
     @Override

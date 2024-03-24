@@ -97,18 +97,19 @@ public class Algorithms {
     //Sort in descending order:
     private static <E extends Comparable<E>> int partition(E[] array, int begin, int end) {
         E pivot = array[end];
-        int leftPointer = begin;
-        int rightPointer = end;
-        while (leftPointer < rightPointer) {
-            while (leftPointer < rightPointer && array[leftPointer].compareTo(pivot) > 0) {
+        int leftPointer = begin - 1;
+
+        for (int j = begin; j < end; j++) {
+            if (array[j].compareTo(pivot) > 0) { // Change this comparison for descending order
                 leftPointer++;
+                swap(array, leftPointer, j);
             }
-            while (leftPointer < rightPointer && array[rightPointer].compareTo(pivot) < 0) {
-                rightPointer--;
-            }
-            swap(array, leftPointer, rightPointer);
         }
-        return leftPointer;
+
+        // Swap pivot into the correct position
+        swap(array, leftPointer + 1, end);
+
+        return leftPointer + 1; // Return the final position of the pivot
     }
 
 

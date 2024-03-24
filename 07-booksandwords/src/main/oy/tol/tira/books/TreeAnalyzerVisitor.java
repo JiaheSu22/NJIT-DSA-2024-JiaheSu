@@ -1,6 +1,6 @@
 package oy.tol.tira.books;
 
-class TreeAnalyzerVisitor<K extends Comparable<K>, V> implements Visitor<K, V> {
+class TreeAnalyzerVisitor<K extends Comparable<K>, V extends Comparable<V>> implements Visitor<K, V> {
 
 	int minHeight = Integer.MAX_VALUE;
 	int maxHeight = Integer.MIN_VALUE;

@@ -7,7 +7,7 @@ package oy.tol.tira.books;
  * The actual concrete data structure that implements a Dictionary can
  * be either a linear array, hash table or binary search tree, for example.
  */
-public interface Dictionary<K extends Comparable<K>, V> {
+public interface Dictionary<K extends Comparable<K>, V extends Comparable<V>> {
    /**
     * The types of phonebook implementations in this task.
     */
