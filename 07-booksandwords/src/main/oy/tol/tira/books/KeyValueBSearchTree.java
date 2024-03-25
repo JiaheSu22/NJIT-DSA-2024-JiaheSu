@@ -73,7 +73,7 @@ public class KeyValueBSearchTree<K extends Comparable<K>, V extends Comparable<V
             return true;
         } else {
             int depthBefore = TreeNode.currentAddTreeDepth;
-            int added = root.insert(key, value, key.hashCode());
+            int added = root.insert(key, value, customHashCode(key));
             int depthAfter = TreeNode.currentAddTreeDepth;
             TreeNode.currentAddTreeDepth = 0; // Reset for next addition
             if (added > 0) {
@@ -92,7 +92,7 @@ public class KeyValueBSearchTree<K extends Comparable<K>, V extends Comparable<V
         if (key == null) {
             throw new IllegalArgumentException("Key cannot be null.");
         }
-        return (root != null) ? root.find(key, key.hashCode()) : null;
+        return (root != null) ? root.find(key, customHashCode(key)) : null;
     }
 
     @Override
@@ -118,4 +118,12 @@ public class KeyValueBSearchTree<K extends Comparable<K>, V extends Comparable<V
         // structures.
     }
 
+    private int customHashCode(K key) {
+        int hash = 0;
+        String keyString = key.toString();
+        for (int i = 0; i < keyString.length(); i++) {
+            hash = 31 * hash + keyString.charAt(i);
+        }
+        return hash;
+    }
 }

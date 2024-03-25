@@ -22,9 +22,9 @@ public final class BookFactory {
         //return new BadBookImplementation();
 
         //HashTable Implementation
-        //return new MyBook_HashTable();
+        return new MyBook_HashTable();
 
         //BST Implementation
-        return new MyBook_BST();
+        //return new MyBook_BST();
     }
 }
