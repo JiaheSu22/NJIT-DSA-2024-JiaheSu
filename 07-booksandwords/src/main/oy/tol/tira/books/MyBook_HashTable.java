@@ -68,8 +68,7 @@ public class MyBook_HashTable implements Book {
 
     @Override
     public void report() {
-        Pair<String, Integer>[] sortedWords = wordCounts.toSortedArray(); // Assuming toSortedArray() method sorts by descending order
-        System.out.println("Top Words by Occurrence:");
+        Pair<String, Integer>[] sortedWords = wordCounts.toSortedArray();
         for (int i = 0; i < Math.min(sortedWords.length, 100); i++) {
             String word = String.format("%-20s", sortedWords[i].getKey()).replace(' ', '.');
             System.out.format("%4d. %s %6d%n", i + 1, word, sortedWords[i].getValue());
@@ -103,20 +102,20 @@ public class MyBook_HashTable implements Book {
 
     @Override
     public String getWordInListAt(int position) {
-        Pair<String, Integer>[] sortedWords = wordCounts.toSortedArray(); // Assuming toSortedArray is implemented
+        Pair<String, Integer>[] sortedWords = wordCounts.toSortedArray();
         if (position >= 0 && position < sortedWords.length) {
             return sortedWords[position].getKey();
         }
-        return null; // If position is out of bounds
+        return null;
     }
 
     @Override
     public int getWordCountInListAt(int position) {
-        Pair<String, Integer>[] sortedWords = wordCounts.toSortedArray(); // Assuming toSortedArray is implemented
+        Pair<String, Integer>[] sortedWords = wordCounts.toSortedArray();
         if (position >= 0 && position < sortedWords.length) {
             return sortedWords[position].getValue();
         }
-        return -1; // If position is out of bounds
+        return -1;
     }
 }
 
